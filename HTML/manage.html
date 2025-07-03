@@ -19,9 +19,9 @@
       background: linear-gradient(135deg, #1f1f1f, #2e2e2e);
       color: white;
       display: flex;
-      flex-direction: column;
     }
 
+    /* Sidebar */
     .sidebar {
       position: fixed;
       top: 0;
@@ -34,7 +34,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      z-index: 999;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.hidden {
+      transform: translateX(-100%);
     }
 
     .logo {
@@ -125,6 +130,7 @@
     .main-content {
       margin-left: 250px;
       padding: 40px;
+      flex: 1;
       transition: margin-left 0.3s ease;
     }
 
@@ -194,135 +200,61 @@
     }
 
     .filter-sort-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 30px;
-}
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
 
-.filter-sort-bar select,
-.filter-sort-bar button {
-  padding: 10px 16px;
-  font-size: 14px;
-  border-radius: 8px;
-  border: none;
-  background-color: #f4f4f4;
-  color: #000;
-  cursor: pointer;
-}
+    .filter-sort-bar select,
+    .filter-sort-bar button {
+      padding: 10px 16px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: none;
+      background-color: #f4f4f4;
+      color: #000;
+      cursor: pointer;
+    }
 
-.filter-sort-bar select:focus,
-.filter-sort-bar button:focus {
-  outline: 2px solid #5aa73a;
-}
+    #exportPDFBtn {
+      background-color: #ffffff;
+      color: #222;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
 
-#exportPDFBtn {
-  background-color: #ffffff;
-  color: #222;
-  border: none;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
-}
+    #exportPDFBtn:hover {
+      background-color: #e6e6e6;
+    }
 
-#exportPDFBtn:hover {
-  background-color: #e6e6e6;
-}
+    /* Hamburger Icon */
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      background: none;
+      color: white;
+      border: none;
+      z-index: 1100;
+      cursor: pointer;
+    }
 
-.log-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: flex-start;
-}
-
-.log-card {
-  background-color: #2f2f2f;
-  border-radius: 16px;
-  padding: 20px;
-  width: 280px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  position: relative;
-  animation: fadeInUp 1s ease-out forwards;
-  opacity: 0;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.log-card h3 {
-  margin-bottom: 10px;
-  color: #f9f9f9;
-}
-
-.log-card p {
-  font-size: 14px;
-  margin: 4px 0;
-  color: #ccc;
-}
-
-.badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  margin-bottom: 10px;
-  color: black;
-  font-weight: bold;
-}
-
-.delete-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: transparent;
-  border: none;
-  color: #ff6868;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .filter-sort-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .log-card {
-    width: 100%;
-  }
-
-  .main-content {
-    padding: 20px;
-    margin-left: 0;
-  }
-}
-
-
+    /* Responsive */
     @media (max-width: 768px) {
-      .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        justify-content: space-between;
-        padding: 10px 20px;
+      .hamburger {
+        display: block;
       }
 
-      .sidebar .profile,
-      .sidebar .nav,
-      .sidebar .logout {
-        display: none;
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.active {
+        transform: translateX(0);
       }
 
       .main-content {
@@ -333,11 +265,21 @@
       .log-card {
         width: 100%;
       }
+
+      .filter-sort-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="sidebar">
+  <button class="hamburger" id="hamburgerBtn" aria-label="Open sidebar" aria-controls="sidebar" aria-expanded="false">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <nav class="sidebar" id="sidebar" role="navigation" aria-hidden="true">
     <div class="logo">Spend Manager</div>
 
     <div class="profile">
@@ -356,51 +298,58 @@
     <div class="logout">
       <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Log out</button>
     </div>
-  </div>
+  </nav>
 
-  <div class="main-content">
-  <h1>Spend Logs</h1>
+  <main class="main-content">
+    <h1>Spend Logs</h1>
 
-  <!-- FILTER + SORT -->
-  <div class="filter-sort-bar">
-    <select id="filterCategory">
-      <option value="all">📂 All Categories</option>
-      <option value="House Help Salary">🧹 House Help Salary</option>
-      <option value="Groceries">🛒 Groceries</option>
-      <option value="Transport">🚗 Transport</option>
-      <option value="Bills & Utilities">💡 Bills & Utilities</option>
-      <option value="Healthcare">💊 Healthcare</option>
-      <option value="Dining & Food">🍽️ Dining & Food</option>
-      <option value="Personal">🧍 Personal</option>
-      <option value="Other">📦 Other</option>
-    </select>
+    <div class="filter-sort-bar">
+      <select id="filterCategory">
+        <option value="all">📂 All Categories</option>
+        <option value="House Help Salary">🧹 House Help Salary</option>
+        <option value="Groceries">🛒 Groceries</option>
+        <option value="Transport">🚗 Transport</option>
+        <option value="Bills & Utilities">💡 Bills & Utilities</option>
+        <option value="Healthcare">💊 Healthcare</option>
+        <option value="Dining & Food">🍽️ Dining & Food</option>
+        <option value="Personal">🧍 Personal</option>
+        <option value="Other">📦 Other</option>
+      </select>
 
-    <select id="sortBy">
-      <option value="date_desc">Date (Newest First)</option>
-      <option value="date_asc">Date (Oldest First)</option>
-      <option value="amount_desc">Amount (High to Low)</option>
-      <option value="amount_asc">Amount (Low to High)</option>
-      <option value="title_asc">Title (A-Z)</option>
-      <option value="title_desc">Title (Z-A)</option>
-    </select>
+      <select id="sortBy">
+        <option value="date_desc">Date (Newest First)</option>
+        <option value="date_asc">Date (Oldest First)</option>
+        <option value="amount_desc">Amount (High to Low)</option>
+        <option value="amount_asc">Amount (Low to High)</option>
+        <option value="title_asc">Title (A-Z)</option>
+        <option value="title_desc">Title (Z-A)</option>
+      </select>
 
-    <button id="exportPDFBtn">📄 Export Spend Logs to PDF</button>
-  </div>
+      <button id="exportPDFBtn">📄 Export Spend Logs to PDF</button>
+    </div>
 
-  <!-- SPEND LOG CARDS -->
-  <div id="logsContainer" class="log-grid"></div>
-</div>
+    <div id="logsContainer" class="log-grid"></div>
+  </main>
 
-
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
   <script src="../JS/logout.js"></script>
-
   <script src="../JS/manage.js"></script>
+
+  <script>
+    const hamburger = document.getElementById('hamburgerBtn');
+    const sidebar = document.getElementById('sidebar');
+
+    hamburger.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      const isExpanded = sidebar.classList.contains('active');
+      hamburger.setAttribute('aria-expanded', isExpanded);
+      sidebar.setAttribute('aria-hidden', !isExpanded);
+    });
+  </script>
 </body>
 </html>
