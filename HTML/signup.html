@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="../CSS/style.css" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1e1e1e;
+      color: white;
+    }
+
+    .auth-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #121212;
+    }
+
+    .auth-container {
+      background-color: #2a2a2a;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .auth-container h2 {
+      margin-bottom: 10px;
+    }
+
+    .auth-container p {
+      color: #bbb;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .auth-container a {
+      color: #a678f4;
+      text-decoration: none;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      background-color: #3a3a3a;
+      border: 1px solid #555;
+      color: white;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      background-color: #7b3ff1;
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      margin-bottom: 30px;
+    }
+
+    .btn-primary:hover {
+      background-color: #692dd3;
+    }
+
+    .auth-divider {
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    .social-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: #3a3a3a;
+      padding: 10px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .social-login:hover {
+      background-color: #444;
+    }
+
+    @media (max-width: 480px) {
+      .auth-container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body class="auth-body">
+  <div class="auth-container">
+    <h2>Create your account</h2>
+    <p>Already have an account? <a href="signin.html">Sign in</a></p>
+
+    <input type="text" id="fname" placeholder="First Name" class="input-field" />
+    <input type="text" id="lname" placeholder="Last Name" class="input-field" />
+    <input type="email" id="email" placeholder="Email" class="input-field" />
+    <input type="password" id="pwd" placeholder="Create a password" class="input-field" />
+
+    <button id="cr_acc_btn" class="btn-primary">Create Account</button>
+
+    <div class="auth-divider">Or sign up with</div>
+    <div id="google_btn" class="social-login">
+      <img src="https://img.icons8.com/color/16/google-logo.png" />
+      Google
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
+  <script src="../JS/signup.js"></script>
+</body>
+</html>

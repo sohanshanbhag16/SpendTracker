@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Settings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #121212;
+      color: white;
+      display: flex;
+    }
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background: linear-gradient(to bottom, #91b66c 0%, #1e2a24 30%, #0b1013 100%);
+      color: white;
+      padding-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .logo { font-weight: bold; font-size: 20px; margin-bottom: 30px; }
+    .profile { text-align: center; margin-bottom: 30px; }
+    .profile img {
+      width: 60px; height: 60px; border-radius: 50%;
+      border: 2px solid white; margin-bottom: 10px;
+    }
+    .profile .name { font-size: 16px; }
+    .profile .tag {
+      background-color: #ffffff33; padding: 2px 8px;
+      border-radius: 10px; font-size: 12px; margin-top: 4px; display: inline-block;
+    }
+    .nav {
+      width: 100%; padding: 0 20px;
+      display: flex; flex-direction: column; gap: 10px; flex-grow: 1;
+    }
+    .nav button {
+      background: transparent; border: none; color: white;
+      font-size: 15px; padding: 12px 20px; text-align: left;
+      border-radius: 8px; cursor: pointer; display: flex;
+      align-items: center; gap: 12px; transition: background-color 0.3s;
+    }
+    .nav button:hover, .nav button.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .logout {
+      padding: 20px; width: 100%;
+    }
+    .logout button {
+      background: none; border: none; color: #ccc;
+      font-size: 15px; display: flex; align-items: center;
+      gap: 10px; cursor: pointer; width: 100%;
+      padding: 10px 20px; border-radius: 8px;
+    }
+    .logout button:hover {
+      background-color: rgba(255, 255, 255, 0.1); color: #fff;
+    }
+    .main-content {
+      flex-grow: 1; padding: 40px; margin-left: 250px;
+    }
+    .main-content h1 { margin-bottom: 20px; }
+
+    .settings-section {
+      margin-bottom: 30px;
+      background: #1f1f1f;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .settings-section h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 8px;
+    }
+
+    .settings-section label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .settings-section input {
+      padding: 10px;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #2a2a2a;
+      color: white;
+      margin-bottom: 15px;
+    }
+
+    .settings-section button {
+      background-color: #5aa73a;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .settings-section button:hover {
+      background-color: #3e8e2e;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: relative; width: 100%; height: auto;
+        flex-direction: row; justify-content: space-between; padding: 10px 20px;
+      }
+      .sidebar .profile, .sidebar .nav, .sidebar .logout {
+        display: none;
+      }
+      .main-content {
+        margin-left: 0; padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">Spend Manager</div>
+    <div class="profile">
+      <img id="userPhoto" src="https://via.placeholder.com/60" alt="Profile Picture" />
+      <div class="name" id="userName">User</div>
+      <div class="tag">Client</div>
+    </div>
+    <div class="nav">
+      <button onclick="window.location.href='dashboard.html'"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+      <button onclick="window.location.href='spend.html'"><i class="fas fa-money-bill-wave"></i> Record Spends</button>
+      <button onclick="window.location.href='manage.html'"><i class="fas fa-database"></i> Manage Data</button>
+      <button class="active"><i class="fas fa-cog"></i> Settings</button>
+    </div>
+    <div class="logout">
+      <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Log out</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <h1>Settings</h1>
+
+    <div class="settings-section">
+      <h2>Change Display Name</h2>
+      <label for="displayName">New Name</label>
+      <input type="text" id="displayName" placeholder="Enter your name" />
+      <button onclick="updateDisplayName()">Update Name</button>
+    </div>
+
+    <div class="settings-section">
+      <h2>Change Password</h2>
+      <label for="newPassword">New Password</label>
+      <input type="password" id="newPassword" placeholder="Enter new password" />
+      <button onclick="updatePassword()">Update Password</button>
+    </div>
+
+    <div class="settings-section">
+      <h2>Danger Zone</h2>
+      <button onclick="deleteAccount()" style="background-color: #ff4c4c;">Delete My Account</button>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
+  <script src="../JS/logout.js"></script>
+  <script src="../JS/settings.js"></script>
+</body>
+</html>

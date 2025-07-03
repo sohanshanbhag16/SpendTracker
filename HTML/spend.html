@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Record Spend</title>
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1f1f1f, #2e2e2e);
+      color: white;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 215px;
+      height: 100vh;
+      background: linear-gradient(to bottom, #91b66c 0%, #1e2a24 30%, #0b1013 100%);
+      color: white;
+      padding-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .profile {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .profile img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid white;
+      margin-bottom: 10px;
+    }
+
+    .profile .name {
+      font-size: 16px;
+    }
+
+    .profile .tag {
+      background-color: #ffffff33;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-top: 4px;
+      display: inline-block;
+    }
+
+    .nav {
+      width: 100%;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex-grow: 1;
+    }
+
+    .nav button {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 15px;
+      padding: 12px 20px;
+      text-align: left;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background-color 0.3s;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav button i {
+      width: 18px;
+      text-align: center;
+    }
+
+    .logout {
+      padding: 20px;
+      width: 100%;
+    }
+
+    .logout button {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      width: 100%;
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+
+    .logout button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .main-content {
+      flex-grow: 1;
+      padding: 40px 20px;
+      margin-left: 215px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    label {
+      font-weight: 500;
+      margin-bottom: 6px;
+      display: block;
+      text-align: left;
+      width: 100%;
+    }
+
+    input, select {
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #888;
+      background-color: #333;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    button.submit {
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s;
+    }
+
+    button.submit:hover {
+      background-color: #5aa73a;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .profile, .logo, .logout {
+        display: none;
+      }
+
+      .nav {
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0;
+      }
+
+      .nav button {
+        padding: 10px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">Asset Manager</div>
+
+    <div class="profile">
+      <img src="" alt="Profile Picture" />
+      <div class="name" id="userName"></div>
+      <div class="tag">Client</div>
+    </div>
+
+    <div class="nav">
+      <button onclick="window.location.href='dashboard.html'"><i class="fas fa-tachometer-alt"></i></button>
+      <button onclick="window.location.href='spend.html'" class="active"><i class="fas fa-money-bill-wave"></i></button>
+      <button onclick="window.location.href='manage.html'"><i class="fas fa-database"></i></button>
+      <button  onclick="window.location.href='settings.html'"><i class="fas fa-cog"></i></button>
+    </div>
+
+    <div class="logout">
+      <button><i class="fas fa-sign-out-alt"></i> Log out</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <h1>Record Spend</h1>
+
+    <label for="spendTtitle">Spend Title*</label>
+    <input type="text" id="spendTitle" placeholder="Enter spend title" required>
+
+    <label for="spendCategory">Category*</label>
+    <select id="spendCategory" required>
+        <option value="" disabled selected>Select spend category</option>
+        <option value="House Help Salary">🧹 House Help Salary</option>
+        <option value="Groceries">🛒 Groceries</option>
+        <option value="Transport">🚗 Transport</option>
+        <option value="Bills & Utilities">💡 Bills & Utilities</option>
+        <option value="Healthcare">💊 Healthcare</option>
+        <option value="Dining & Food">🍽️ Dining & Food</option>
+        <option value="Personal">🧍 Personal</option>
+        <option value="Other">📦 Other</option>
+    </select>
+
+    <label for="spendValue">Value*</label>
+    <input type="number" id="spendValue" placeholder="Spend Value (in ₹)" required>
+
+    <label for="spendLocation">Location</label>
+    <input type="text" id="spendLocation" placeholder="Location (optional)">
+
+    <label for="spendDate">Date of spending*</label>
+    <input type="date" id="spendDate">
+
+    <label for="spendNotes">Notes</label>
+    <input type="text" id="spendNotes" placeholder="Notes">
+
+    <button type="submit" class="submit">Submit Expenditure</button>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
+  <script src="../JS/logout.js"></script>
+
+  <script src="../JS/spend.js"></script>
+</body>
+</html>
