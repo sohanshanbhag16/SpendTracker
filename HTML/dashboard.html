@@ -34,6 +34,11 @@
       flex-direction: column;
       align-items: center;
       z-index: 999;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.hidden {
+      transform: translateX(-100%);
     }
 
     .logo {
@@ -127,6 +132,19 @@
       transition: margin-left 0.3s ease;
     }
 
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      color: white;
+      background: none;
+      border: none;
+      z-index: 1000;
+      cursor: pointer;
+    }
+
     .summary-container,
     .graph-container {
       display: flex;
@@ -134,17 +152,6 @@
       gap: 20px;
       justify-content: center;
       margin-top: 20px;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
     .summary-box, .graph-box {
@@ -179,20 +186,28 @@
       margin-bottom: 10px;
     }
 
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     @media (max-width: 768px) {
-      .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        justify-content: space-between;
-        padding: 10px 20px;
+      .hamburger {
+        display: block;
       }
 
-      .sidebar .nav,
-      .sidebar .profile,
-      .sidebar .logout {
-        display: none;
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
       }
 
       .main-content {
@@ -212,7 +227,12 @@
   </style>
 </head>
 <body>
-  <div class="sidebar">
+
+  <button class="hamburger" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <div class="sidebar" id="sidebar">
     <div class="logo">Spend Tracker</div>
     <div class="profile">
       <img src="" alt="Profile Picture" />
@@ -264,12 +284,17 @@
     </div>
   </div>
 
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('show');
+    }
+  </script>
+
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   <script src="../JS/logout.js"></script>
-
   <script src="../JS/dashboard.js"></script>
 </body>
 </html>
