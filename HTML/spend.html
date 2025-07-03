@@ -6,6 +6,7 @@
   <title>Record Spend</title>
   <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
     * {
       margin: 0;
@@ -21,7 +22,10 @@
     }
 
     .sidebar {
-      width: 215px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
       height: 100vh;
       background: linear-gradient(to bottom, #91b66c 0%, #1e2a24 30%, #0b1013 100%);
       color: white;
@@ -29,9 +33,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      position: fixed;
-      top: 0;
-      left: 0;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.hidden {
+      transform: translateX(-100%);
     }
 
     .logo {
@@ -127,9 +134,10 @@
     .main-content {
       flex-grow: 1;
       padding: 40px 20px;
-      margin-left: 215px;
+      margin-left: 250px;
       max-width: 600px;
       width: 100%;
+      transition: margin-left 0.3s ease;
     }
 
     label {
@@ -172,41 +180,46 @@
       margin-bottom: 20px;
     }
 
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      background: none;
+      color: white;
+      border: none;
+      z-index: 1100;
+      cursor: pointer;
+    }
+
     @media (max-width: 768px) {
+      .hamburger {
+        display: block;
+      }
+
       .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        justify-content: space-around;
-        padding: 10px;
+        transform: translateX(-100%);
+      }
+
+      .sidebar.active {
+        transform: translateX(0);
       }
 
       .main-content {
         margin-left: 0;
         padding: 20px;
       }
-
-      .profile, .logo, .logout {
-        display: none;
-      }
-
-      .nav {
-        flex-direction: row;
-        justify-content: space-around;
-        padding: 0;
-      }
-
-      .nav button {
-        padding: 10px;
-        font-size: 14px;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="sidebar">
-    <div class="logo">Asset Manager</div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Toggle sidebar" aria-controls="sidebar" aria-expanded="false">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <nav class="sidebar" id="sidebar" role="navigation" aria-hidden="true">
+    <div class="logo">Spend Manager</div>
 
     <div class="profile">
       <img src="" alt="Profile Picture" />
@@ -215,34 +228,34 @@
     </div>
 
     <div class="nav">
-      <button onclick="window.location.href='dashboard.html'"><i class="fas fa-tachometer-alt"></i></button>
-      <button onclick="window.location.href='spend.html'" class="active"><i class="fas fa-money-bill-wave"></i></button>
-      <button onclick="window.location.href='manage.html'"><i class="fas fa-database"></i></button>
-      <button  onclick="window.location.href='settings.html'"><i class="fas fa-cog"></i></button>
+      <button onclick="window.location.href='dashboard.html'"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+      <button class="active" onclick="window.location.href='spend.html'"><i class="fas fa-money-bill-wave"></i> Record Spends</button>
+      <button onclick="window.location.href='manage.html'"><i class="fas fa-database"></i> Manage Data</button>
+      <button onclick="window.location.href='settings.html'"><i class="fas fa-cog"></i> Settings</button>
     </div>
 
     <div class="logout">
-      <button><i class="fas fa-sign-out-alt"></i> Log out</button>
+      <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Log out</button>
     </div>
-  </div>
+  </nav>
 
-  <div class="main-content">
+  <main class="main-content">
     <h1>Record Spend</h1>
 
-    <label for="spendTtitle">Spend Title*</label>
+    <label for="spendTitle">Spend Title*</label>
     <input type="text" id="spendTitle" placeholder="Enter spend title" required>
 
     <label for="spendCategory">Category*</label>
     <select id="spendCategory" required>
-        <option value="" disabled selected>Select spend category</option>
-        <option value="House Help Salary">🧹 House Help Salary</option>
-        <option value="Groceries">🛒 Groceries</option>
-        <option value="Transport">🚗 Transport</option>
-        <option value="Bills & Utilities">💡 Bills & Utilities</option>
-        <option value="Healthcare">💊 Healthcare</option>
-        <option value="Dining & Food">🍽️ Dining & Food</option>
-        <option value="Personal">🧍 Personal</option>
-        <option value="Other">📦 Other</option>
+      <option value="" disabled selected>Select spend category</option>
+      <option value="House Help Salary">🧹 House Help Salary</option>
+      <option value="Groceries">🛒 Groceries</option>
+      <option value="Transport">🚗 Transport</option>
+      <option value="Bills & Utilities">💡 Bills & Utilities</option>
+      <option value="Healthcare">💊 Healthcare</option>
+      <option value="Dining & Food">🍽️ Dining & Food</option>
+      <option value="Personal">🧍 Personal</option>
+      <option value="Other">📦 Other</option>
     </select>
 
     <label for="spendValue">Value*</label>
@@ -258,13 +271,25 @@
     <input type="text" id="spendNotes" placeholder="Notes">
 
     <button type="submit" class="submit">Submit Expenditure</button>
-  </div>
+  </main>
 
+  <!-- Firebase and JS -->
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
   <script src="../JS/logout.js"></script>
-
   <script src="../JS/spend.js"></script>
+
+  <script>
+    const hamburger = document.getElementById('hamburgerBtn');
+    const sidebar = document.getElementById('sidebar');
+
+    hamburger.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      const isExpanded = sidebar.classList.contains('active');
+      hamburger.setAttribute('aria-expanded', isExpanded);
+      sidebar.setAttribute('aria-hidden', !isExpanded);
+    });
+  </script>
 </body>
 </html>
